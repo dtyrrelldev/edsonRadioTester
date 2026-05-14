@@ -53,6 +53,13 @@
   height: 100vh;
 } 
 
+html,
+body {
+  touch-action: manipulation;
+  overflow-x: hidden;
+}
+
+
 .map {
   height: 100vh;
   width: 100%;
@@ -79,4 +86,527 @@ main {
   font-size: 24px;
   color: #a8adbb;
   margin-top: 0;
+}
+
+.map-page {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 70px);
+  overflow: hidden;
+}
+
+.map {
+  width: 100%;
+  height: 100%;
+}
+
+.score-card {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+
+  background-color: #202432;
+  color: white;
+
+  padding: 12px 22px;
+  border-radius: 16px;
+
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  text-align: center;
+
+  min-width: 220px;
+}
+
+.score-label {
+  margin: 0;
+  font-size: 14px;
+  color: #c9ced8;
+}
+
+.score-number {
+  margin: 4px 0 0;
+  font-size: 28px;
+  line-height: 1;
+}
+
+.popup-card {
+  width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.popup-title {
+  margin: 0;
+  font-size: 20px;
+  color: #202432;
+}
+
+.popup-instructions {
+  margin: 0;
+  font-size: 14px;
+  color: #555;
+}
+
+.popup-correct {
+  margin: 0;
+  font-size: 14px;
+  color: #167a3f;
+  font-weight: 600;
+}
+
+.channel-input {
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 10px 12px;
+  font-size: 16px;
+
+  border: 1px solid #c7cbd4;
+  border-radius: 10px;
+}
+
+.channel-input:disabled {
+  background-color: #eef2f0;
+  color: #777;
+}
+
+.guess-button {
+  width: 100%;
+
+  padding: 10px 12px;
+  border: none;
+  border-radius: 10px;
+
+  background-color: #202432;
+  color: white;
+
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.guess-button:hover {
+  background-color: #34394d;
+}
+
+.guess-button:disabled {
+  background-color: #198754;
+  cursor: default;
+}
+
+.feedback-correct {
+  margin: 0;
+  color: #167a3f;
+  font-weight: 600;
+}
+
+.feedback-wrong {
+  margin: 0;
+  color: #b42318;
+  font-weight: 600;
+}
+
+/* Leaflet popup spacing override */
+.leaflet-popup-content {
+  margin: 16px;
+}
+
+/* Mobile improvements */
+@media (max-width: 600px) {
+  .map-page {
+    height: calc(100vh - 60px);
+  }
+
+  .score-card {
+    top: 10px;
+    width: calc(100% - 40px);
+    max-width: 320px;
+    padding: 10px 14px;
+  }
+
+  .score-label {
+    font-size: 13px;
+  }
+
+  .score-number {
+    font-size: 24px;
+  }
+
+  .popup-card {
+    width: 200px;
+  }
+
+  .popup-title {
+    font-size: 18px;
+  }
+
+  .channel-input,
+  .guess-button {
+    font-size: 16px;
+    padding: 11px 12px;
+  }
+}
+
+
+.win-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2000;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: rgba(0, 0, 0, 0.45);
+  padding: 20px;
+}
+
+.win-card {
+  width: 100%;
+  max-width: 360px;
+
+  background-color: white;
+  color: #202432;
+
+  padding: 28px 24px;
+  border-radius: 20px;
+
+  text-align: center;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+}
+
+.win-card h2 {
+  margin: 0 0 12px;
+  font-size: 28px;
+}
+
+.win-card p {
+  margin: 0 0 20px;
+  font-size: 16px;
+  color: #000000;
+}
+
+.win-card button {
+  width: 100%;
+
+  padding: 12px 16px;
+  border: none;
+  border-radius: 12px;
+
+  background-color: #198754;
+  color: white;
+
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.win-card button:hover {
+  background-color: #146c43;
+}
+
+
+.learn-card {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+
+  background-color: #202432;
+  color: white;
+
+  padding: 12px 22px;
+  border-radius: 16px;
+
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  text-align: center;
+
+  min-width: 220px;
+}
+
+.learn-label {
+  margin: 0;
+  font-size: 14px;
+  color: #c9ced8;
+}
+
+.learn-title {
+  margin: 4px 0 0;
+  font-size: 26px;
+  line-height: 1;
+}
+
+.learn-channel {
+  margin: 0;
+  padding: 10px 12px;
+
+  background-color: #eef2f0;
+  color: #167a3f;
+
+  border-radius: 10px;
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .learn-card {
+    top: 10px;
+    width: calc(100% - 40px);
+    max-width: 320px;
+    padding: 10px 14px;
+  }
+
+  .learn-label {
+    font-size: 13px;
+  }
+
+  .learn-title {
+    font-size: 24px;
+  }
+
+  .learn-channel {
+    font-size: 20px;
+    padding: 9px 10px;
+  }
+}
+
+.info-page {
+  min-height: calc(100vh - 70px);
+  padding: 100px 24px;
+  background-color: #f4f6fb;
+  color: #202432;
+}
+
+.info-header h1 {
+  font-size: 48px;
+  margin-bottom: 32px;
+  color: #202432;
+}
+
+.info-header p {
+  font-size: 25px;
+  color: #3a3f52;
+  margin-bottom: 25px;
+}
+
+.info-section h2 {
+  font-size: 32px;
+  margin-bottom: 12px;
+  color: #202432;
+}
+
+.info-section p {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #3a3f52;
+}
+
+.season-page {
+  min-height: calc(100vh - 70px);
+  padding: 56px 24px;
+  background:
+    radial-gradient(circle at top left, rgba(88, 96, 122, 0.35), transparent 35%),
+    linear-gradient(135deg, #11131a, #1b2030);
+  color: white;
+}
+
+.season-hero {
+  max-width: 900px;
+  margin: 0 auto 42px;
+  text-align: center;
+}
+
+.season-kicker {
+  margin: 0 0 10px;
+  color: #9fd39f;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.season-hero h1 {
+  margin: 0;
+  font-size: 56px;
+  line-height: 1.05;
+}
+
+.season-hero-text {
+  max-width: 700px;
+  margin: 18px auto 0;
+  color: #c9ced8;
+  font-size: 20px;
+  line-height: 1.6;
+}
+
+.quote-grid {
+  max-width: 1100px;
+  margin: 0 auto 32px;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: 20px;
+}
+
+.quote-card {
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 28px;
+  border-radius: 22px;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.25);
+}
+
+.featured-quote {
+  background: linear-gradient(135deg, rgba(32, 36, 50, 0.95), rgba(44, 56, 70, 0.95));
+}
+
+.quote-mark {
+  position: absolute;
+  top: -20px;
+  right: 18px;
+  margin: 0;
+  font-size: 110px;
+  color: rgba(255, 255, 255, 0.12);
+  line-height: 1;
+}
+
+.quote-card blockquote {
+  position: relative;
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+.quote-author {
+  margin: 18px 0 0;
+  color: #9fd39f;
+  font-weight: 700;
+}
+
+.season-gallery {
+  max-width: 1100px;
+  margin: 0 auto 32px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.season-photo-card {
+  background: #f4f6fb;
+  color: #202432;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.25);
+}
+
+.season-photo-card img {
+  width: 100%;
+  height: 230px;
+  object-fit: cover;
+  display: block;
+}
+
+.photo-placeholder {
+  height: 230px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background:
+    linear-gradient(135deg, rgba(159, 211, 159, 0.8), rgba(88, 96, 122, 0.9));
+  color: white;
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.season-photo-card h2 {
+  margin: 20px 20px 8px;
+  font-size: 24px;
+}
+
+.season-photo-card p {
+  margin: 0 20px 22px;
+  color: #58607a;
+  line-height: 1.5;
+}
+
+.season-feature {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 220px;
+  gap: 22px;
+  align-items: center;
+
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 30px;
+  border-radius: 24px;
+}
+
+.season-feature h2 {
+  margin: 0 0 10px;
+  font-size: 34px;
+}
+
+.season-feature p {
+  margin: 0;
+  color: #c9ced8;
+  line-height: 1.6;
+}
+
+.feature-stat {
+  background: #9fd39f;
+  color: #11131a;
+  padding: 24px;
+  border-radius: 20px;
+  text-align: center;
+}
+
+.feature-stat span {
+  display: block;
+  font-size: 54px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.feature-stat p {
+  margin-top: 8px;
+  color: #11131a;
+  font-weight: 700;
+}
+
+/* Mobile */
+@media (max-width: 800px) {
+  .season-page {
+    padding: 36px 16px;
+  }
+
+  .season-hero h1 {
+    font-size: 38px;
+  }
+
+  .season-hero-text {
+    font-size: 17px;
+  }
+
+  .quote-grid,
+  .season-gallery,
+  .season-feature {
+    grid-template-columns: 1fr;
+  }
+
+  .quote-card blockquote {
+    font-size: 18px;
+  }
+
+  .season-photo-card img,
+  .photo-placeholder {
+    height: 200px;
+  }
 }

@@ -1,177 +1,240 @@
 import "../App.css";
 import "leaflet/dist/leaflet.css";
-import {MapContainer, TileLayer, Marker, Popup} from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 
-import {Icon} from "leaflet";
+import { Icon } from "leaflet";
 import locationPin from "../assets/location-pin.png";
-import { useState } from "react";
 import greenLocationPin from "../assets/location-pin-green.png";
+import { useState } from "react";
 
-
-  // markers
-  const markers = [
+const markers = [
   {
     geocode: [53.4088, -117.7882],
     popUp: "Athabasca",
-    channel: 215
+    channels: [215],
   },
   {
     geocode: [53.56666667, -117.5],
     popUp: "Obed",
-    channel: 215
+    channels: [215],
   },
   {
     geocode: [53.51666667, -118.0166667],
     popUp: "Moberly",
-    channel: 217
+    channels: [217, 215],
   },
-    {
+  {
     geocode: [53.98333333, -118.1833333],
     popUp: "Huckleberry",
-    channel: 205
+    channels: [205],
   },
-    {
+  {
     geocode: [53.71666667, -118.5666667],
     popUp: "Adams Creek",
-    channel: 230
+    channels: [230],
   },
-    {
+  {
     geocode: [54.23333333, -118.4],
     popUp: "Simonette",
-    channel: 205
+    channels: [205],
   },
   {
     geocode: [53.96666667, -119.2],
     popUp: "Hamell",
-    channel: 238
+    channels: [238],
   },
   {
     geocode: [53.23333333, -117.1333333],
     popUp: "Yellowhead",
-    channel: 241
+    channels: [241],
   },
   {
     geocode: [52.88333333, -116.9833333],
     popUp: "Grave Flats",
-    channel: 251
+    channels: [251, 241],
   },
   {
     geocode: [53.55, -116.5],
     popUp: "Ansell",
-    channel: 267
+    channels: [267, 208],
   },
   {
     geocode: [53.43, -115.4333333],
     popUp: "Carrot Creek",
-    channel: 219
+    channels: [219],
   },
-    {
+  {
     geocode: [53.91666667, -116.3166667],
     popUp: "Tom Hill",
-    channel: 208
+    channels: [208],
   },
-    {
+  {
     geocode: [53.85, -116.65],
     popUp: "Mayberne",
-    channel: 208
+    channels: [208],
   },
-    {
+  {
     geocode: [54.08333333, -117.3833333],
     popUp: "Berland",
-    channel: 211
-  }
-  ];
+    channels: [211],
+  },
+  {
+    geocode: [53.043006, -117.321816],
+    popUp: "Cadomon",
+    channels: [239],
+  },
+];
 
-  const customIcon = new Icon({
-    iconUrl: locationPin,
-    iconSize: [38, 38] // size of icon
-  })
+const customIcon = new Icon({
+  iconUrl: locationPin,
+  iconSize: [38, 38],
+});
 
-  const greenIcon = new Icon({
-    iconUrl: greenLocationPin,
-    iconSize: [38, 38],
-   });
+const greenIcon = new Icon({
+  iconUrl: greenLocationPin,
+  iconSize: [38, 38],
+});
 
 export function Page2() {
-
   const [score, setScore] = useState(0);
   const [guesses, setGuesses] = useState({});
   const [correctMarkers, setCorrectMarkers] = useState({});
+  const [feedback, setFeedback] = useState({});
+  const [showWinPopup, setShowWinPopup] = useState(false);
 
-  function checkGuess(markerName, correctChannel) {
-    const userGuess = guesses[markerName];
+  function checkGuess(markerName, correctChannels) {
+    const userGuess = Number(guesses[markerName]);
 
     if (correctMarkers[markerName]) {
-        return;
+      return;
     }
 
-    if (Number(userGuess) === correctChannel) {
-      setScore(score + 1);
+    if (correctChannels.includes(userGuess)) {
+      const newScore = score + 1;
 
-        setCorrectMarkers({
+      setScore(newScore);
+
+      setCorrectMarkers({
         ...correctMarkers,
         [markerName]: true,
-        });
+      });
 
-      alert("Correct!");
+      setFeedback({
+        ...feedback,
+        [markerName]: "Correct!",
+      });
+
+      if (newScore === markers.length) {
+        setShowWinPopup(true);
+      }
     } else {
-      alert("Wrong! Try again.");
+      setFeedback({
+        ...feedback,
+        [markerName]: "Wrong, try again.",
+      });
     }
   }
 
   return (
-    <>
-    
-    <h2>Correct channels guessed: {score}</h2>
+    <div className="map-page">
+      <div className="score-card">
+        <p className="score-label">Correct channels guessed</p>
+        <h2 className="score-number">
+          {score} / {markers.length}
+        </h2>
+      </div>
 
-    <MapContainer className = "map" center= {[53.40, -117.59]} zoom={10}>
-    <TileLayer
-    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-    />
+          {showWinPopup && (
+      <div className="win-overlay">
+        <div className="win-card">
+          <h2>Congratulations!</h2>
+          <p>You correctly guessed all {markers.length} radio channels.</p>
 
-      <MarkerClusterGroup>
-        { markers.map(marker => (
-           <Marker
-                key={marker.popUp}
-                position={marker.geocode}
-                icon={correctMarkers[marker.popUp] ? greenIcon : customIcon}
+          <button onClick={() => setShowWinPopup(false)}>
+            Close
+          </button>
+        </div>
+      </div>
+    )}
+
+      <MapContainer
+        className="map"
+        center={[53.4, -117.59]}
+        zoom={8}
+        minZoom={7}
+        maxZoom={12}
+        scrollWheelZoom={true}
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+
+        <MarkerClusterGroup>
+          {markers.map((marker) => (
+            <Marker
+              key={marker.popUp}
+              position={marker.geocode}
+              icon={correctMarkers[marker.popUp] ? greenIcon : customIcon}
             >
+              <Popup>
+                <div className="popup-card">
+                  <h3 className="popup-title">{marker.popUp}</h3>
 
-            <Popup>
-              <h3>{marker.popUp}</h3> 
+                  {correctMarkers[marker.popUp] ? (
+                    <p className="popup-correct">
+                      Correct! Channels: {marker.channels.join(", ")}
+                    </p>
+                  ) : (
+                    <p className="popup-instructions">
+                      Enter the radio channel for this tower.
+                    </p>
+                  )}
 
-                 {correctMarkers[marker.popUp] && (
-                    <p>Correct! Channel: {marker.channel}</p>
-                    )}
+                  <input
+                    className="channel-input"
+                    type="number"
+                    inputMode="numeric"
+                    placeholder="Channel"
+                    value={guesses[marker.popUp] || ""}
+                    disabled={correctMarkers[marker.popUp]}
+                    onChange={(event) =>
+                      setGuesses({
+                        ...guesses,
+                        [marker.popUp]: event.target.value,
+                      })
+                    }
+                  />
 
-              <input
-                type="text"
-                placeholder="Enter radio channel"
-                value={guesses[marker.popUp] || ""}
-                onChange={(event) =>
-                  setGuesses({
-                    ...guesses,
-                    [marker.popUp]: event.target.value,
-                  })
-                }
-              />
-              <button 
-             disabled={correctMarkers[marker.popUp]}
-              onClick={() => checkGuess(marker.popUp, marker.channel)}
-              >
-                {correctMarkers[marker.popUp] ? "Correct" : "Guess"}
-              </button>
-            </Popup>
-          </Marker>
-        ))}
-      </MarkerClusterGroup>
-    </MapContainer>
+                  <button
+                    className="guess-button"
+                    disabled={correctMarkers[marker.popUp]}
+                    onClick={() => checkGuess(marker.popUp, marker.channels)}
+                  >
+                    {correctMarkers[marker.popUp] ? "Correct" : "Guess"}
+                  </button>
 
-    </>
-  )
+                  {feedback[marker.popUp] && (
+                    <p
+                      className={
+                        correctMarkers[marker.popUp]
+                          ? "feedback-correct"
+                          : "feedback-wrong"
+                      }
+                    >
+                      {feedback[marker.popUp]}
+                    </p>
+                  )}
+                </div>
+              </Popup>
+            </Marker>
+          ))}
+        </MarkerClusterGroup>
+      </MapContainer>
+    </div>
+  );
 }
